@@ -1,0 +1,14 @@
+{
+    "name": "szyminson/db-faker",
+    "type": "project",
+    "require": {
+        "fzaninotto/faker": "^1.9",
+        "mbezhanov/faker-provider-collection": "^1.2"
+    },
+    "authors": [
+        {
+            "name": "szyminson",
+            "email": "szyminson@hotmail.com"
+        }
+    ]
+}
