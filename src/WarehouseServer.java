@@ -37,10 +37,18 @@ public class WarehouseServer{
         workQueue.add(employeeApp);
     }
 
-    public void addOrder(int shopID){
+    public void addOrder(int shopID, List<List<Integer>> products){
         int orderID = Integer.parseInt(connector.fetch("SELECT MAX(\"Order_id\") FROM \"WH_Orders\"").get(0).get("MAX(\"ORDER_ID\")")) + 1;
         connector.query(String.format("INSERT INTO \"WH_Orders\"\n" +
                 "    VALUES (%d, %d, NULL, 'Waiting')", orderID, shopID));
+        int orderProdID = Integer.parseInt(connector.fetch("SELECT MAX(\"WH_Ordered_product_id\") FROM \"WH_Ordered_products\"")
+                .get(0).get("MAX(\"WH_ORDERED_PRODUCT_ID\")"));
+        for(List<Integer> product : products){
+            orderProdID += 1;
+            int productID = product.get(0);
+            int count = product.get(1);
+            connector.query(String.format("INSERT INTO \"WH_Ordered_products\" VALUES (%d, %d, %d, %d)",orderProdID, orderID, productID, count));
+        }
     }
 
     public void employeeGetOrder(int orderID){
@@ -88,5 +96,25 @@ public class WarehouseServer{
         connector.query(String.format(Locale.ROOT, "INSERT into \"WH_Employees\"\n" +
                 "    values (%d, '%s', '%s', 0, %.2f)", employeeID, firstName, lastName, salary));
         new EmployeeApp(this, employeeID);
+    }
+
+    public List<Map<String, String>> getProducts(){
+        return connector.fetch("SELECT * FROM \"WH_Products\"");
+    }
+
+    public List<Map<String, String>> getEmployees(){
+        return connector.fetch("SELECT * FROM \"WH_Employees\"");
+    }
+
+    public List<Map<String, String>> getOrders(){
+        return connector.fetch("SELECT * FROM \"WH_Orders\"");
+    }
+
+    public List<Map<String, String>> getShops(){
+        return connector.fetch("SELECT * FROM \"WH_Products\"");
+    }
+
+    public List<Map<String, String>> getOrderedProducts(){
+        return connector.fetch("SELECT * FROM \"WH_Products\"");
     }
 }
