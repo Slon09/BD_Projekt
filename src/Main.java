@@ -1,8 +1,17 @@
 public class Main {
     public static void main(String[] args){
-        DataBaseConnector connector = new DataBaseConnector();
-        print(connector.query("Select TABLE_NAME FROM ALL_TABLES WHERE TABLE_NAME LIKE 'WH%'"));
-        print(connector.query("Select * FROM \"WH_Employees\""));
+        WarehouseServer server = new WarehouseServer();
+//        server.addEmployee("Kacper", "Bojarczuk", 3200);
+//        server.addOrder(2);
+//        server.addOrder(1);
+//        server.addOrder(3);
+//        server.addOrder(4);
+//        server.addOrder(5);
+//        server.addOrder(2);
+        server.enlistEmployees();
+        server.assignOrders();
+        server.employeeApps.get(2).completeOrder();
+        server.assignOrders();
     }
 
     public static void print(Object arg){

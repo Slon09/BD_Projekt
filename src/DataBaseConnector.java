@@ -20,6 +20,7 @@ public class DataBaseConnector {
         try {
             connection = DriverManager.getConnection(
                     driverString+host+":"+port+":"+serviceName, user, password);
+            connection.setAutoCommit(true);
 
         } catch (SQLException e) {
             System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
@@ -30,19 +31,31 @@ public class DataBaseConnector {
         return this;
     }
 
-    public List<Map<String, String>> query(String query){
+    public ResultSet query(String query){
+        Statement st = null;
+        ResultSet rs = null;
+        connect();
         try {
-            connect();
+            st = connection.createStatement();
 
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(query);
+            rs = st.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
+    public List<Map<String, String>> fetch(String query){
+        try {
+            List<Map<String, String>> result = new ArrayList<>();
+
+            ResultSet rs = query(query);
 
             ResultSetMetaData rsmd = rs.getMetaData();
             List<String> cols = new ArrayList<>();
 
             for(int i=1;i<=rsmd.getColumnCount(); ++i) cols.add(rsmd.getColumnName(i));
 
-            List<Map<String, String>> result = new ArrayList<>();
 
             while(rs.next()){
                 Map<String, String> row = new HashMap<>();
