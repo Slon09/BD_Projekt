@@ -4,6 +4,7 @@ DROP TABLE "Orders" CASCADE CONSTRAINTS;
 DROP TABLE "Products" CASCADE CONSTRAINTS;
 DROP TABLE "Shops" CASCADE CONSTRAINTS;
 DROP VIEW OrderView;
+DROP TABLE "Logs";
 
 create table "Employees"
 (
@@ -65,7 +66,126 @@ create table "Ordered_products"
     "Count"              NUMBER not null
 );
 
+create table "Logs"
+(
+	"Date" date not null,
+	"User_name" varchar(64) not null,
+	"Table_name" varchar(64) not null,
+	"Action" varchar(64) not null,
+    "Row_id" NUMBER not null
+);
+
 CREATE VIEW OrderView AS
     SELECT s."Shop_id", s."Name" "Shop Name", COUNT( o."Shop_id") "Orders"
 FROM "Orders" o JOIN "Shops" s ON o."Shop_id" = s."Shop_id"
 GROUP BY s."Shop_id", s."Name";
+
+create or replace trigger employees_log
+    after insert or update or delete on "Employees"
+    for each row
+declare
+    action varchar(64);
+    row_id number(10);
+begin
+    if updating then
+        action := 'Update';
+        row_id := :OLD."Employee_id";
+    elsif inserting then
+        action := 'Insert';
+        row_id := :NEW."Employee_id";
+    elsif deleting then
+        action := 'Delete';
+        row_id := :OLD."Employee_id";
+    end if;
+
+    insert into "Logs"
+        values (SYSDATE,USER, 'Employees', action, row_id);
+end;
+
+create or replace trigger orders_log
+    after insert or update or delete on "Orders"
+    for each row
+declare
+    action varchar(64);
+    row_id number(10);
+begin
+    if updating then
+        action := 'Update';
+        row_id := :OLD."Order_id";
+    elsif inserting then
+        action := 'Insert';
+        row_id := :NEW."Order_id";
+    elsif deleting then
+        action := 'Delete';
+        row_id := :OLD."Order_id";
+    end if;
+
+    insert into "Logs"
+        values (SYSDATE,USER, 'Orders', action, row_id);
+end;
+
+create or replace trigger shops_log
+    after insert or update or delete on "Shops"
+    for each row
+declare
+    action varchar(64);
+    row_id number(10);
+begin
+    if updating then
+        action := 'Update';
+        row_id := :OLD."Shop_id";
+    elsif inserting then
+        action := 'Insert';
+        row_id := :NEW."Shop_id";
+    elsif deleting then
+        action := 'Delete';
+        row_id := :OLD."Shop_id";
+    end if;
+
+    insert into "Logs"
+        values (SYSDATE,USER, 'Shops', action, row_id);
+end;
+
+create or replace trigger products_log
+    after insert or update or delete on "Products"
+    for each row
+declare
+    action varchar(64);
+    row_id number(10);
+begin
+    if updating then
+        action := 'Update';
+        row_id := :OLD."Product_id";
+    elsif inserting then
+        action := 'Insert';
+        row_id := :NEW."Product_id";
+    elsif deleting then
+        action := 'Delete';
+        row_id := :OLD."Product_id";
+    end if;
+
+    insert into "Logs"
+        values (SYSDATE,USER, 'Products', action, row_id);
+end;
+
+create or replace trigger ordered_products_log
+    after insert or update or delete on "Ordered_products"
+    for each row
+declare
+    action varchar(64);
+    row_id number(10);
+begin
+    if updating then
+        action := 'Update';
+        row_id := :OLD."Ordered_product_id";
+    elsif inserting then
+        action := 'Insert';
+        row_id := :NEW."Ordered_product_id";
+    elsif deleting then
+        action := 'Delete';
+        row_id := :OLD."Ordered_product_id";
+    end if;
+
+    insert into "Logs"
+        values (SYSDATE,USER, 'Ordered_products', action, row_id);
+end;
