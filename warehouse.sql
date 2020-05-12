@@ -1,11 +1,10 @@
--- DROP TABLE "WH_Employees" CASCADE CONSTRAINTS;
--- DROP TABLE "WH_Ordered_products" CASCADE CONSTRAINTS;
--- DROP TABLE "WH_Orders" CASCADE CONSTRAINTS;
--- DROP TABLE "WH_Products" CASCADE CONSTRAINTS;
--- DROP TABLE "WH_Shops" CASCADE CONSTRAINTS;
--- DROP VIEW WH_OrderView;
--- DROP TABLE "WH_Logs";
-
+DROP TABLE "WH_Employees" CASCADE CONSTRAINTS;
+DROP TABLE "WH_Ordered_products" CASCADE CONSTRAINTS;
+DROP TABLE "WH_Orders" CASCADE CONSTRAINTS;
+DROP TABLE "WH_Products" CASCADE CONSTRAINTS;
+DROP TABLE "WH_Shops" CASCADE CONSTRAINTS;
+DROP VIEW WH_OrderView;
+DROP TABLE "WH_Logs";
 create table "WH_Employees"
 (
     "Employee_id"      NUMBER       not null
@@ -189,3 +188,59 @@ begin
     insert into "WH_Logs"
         values (SYSDATE,USER, 'Ordered_products', action, row_id);
 end;
+COMMIT;
+INSERT INTO "WH_Employees" ("Employee_id", "First_name", "Last_name", "Salary")
+VALUES (1, 'Sebastian', 'S³oniewski', 1000);
+INSERT INTO "WH_Employees" ("Employee_id", "First_name", "Last_name", "Salary")
+VALUES (2, 'Dominik','Bartkowski', 5000);
+INSERT INTO "WH_Employees" ("Employee_id", "First_name", "Last_name", "Salary")
+VALUES (3, 'Szymon','Porzeziñski', 3000);
+COMMIT;
+
+INSERT INTO "WH_Shops"
+VALUES (1, 'Wybrze¿e Wyspiañskiego 27, Wroc³aw', 'Politechnika Wroc³awska');
+INSERT INTO "WH_Shops"
+VALUES (2, 'Dworcowa 32, Wroc³aw', 'McDonalds');
+INSERT INTO "WH_Shops"
+VALUES (3, 'Bierutowska 4, Wroc³aw', 'Lidl');
+INSERT INTO "WH_Shops"
+VALUES (4, 'Krzywoustego 322, Wroc³aw', 'Poczta Polska UP 14');
+INSERT INTO "WH_Shops"
+VALUES (5, 'Sk³odowskiej-Curie 23, Wroc³aw', 'Panda Ramen');
+COMMIT;
+
+INSERT INTO "WH_Orders"
+VALUES (1, 1, 1, 'In progress');
+INSERT INTO "WH_Orders"
+VALUES( 2, 3, NULL, 'Waiting');
+INSERT INTO "WH_Orders"
+VALUES (3, 5, 2, 'Completed');
+INSERT INTO "WH_Orders"
+VALUES (4, 4, 3, 'Cancelled');
+
+INSERT INTO "WH_Products"
+VALUES (1, 'M¹ka "Stary m³yn" 1kg', 2000);
+INSERT INTO "WH_Products"
+VALUES (2, 'Sól "Wieliczka" 1kg', 1000);
+INSERT INTO "WH_Products"
+VALUES (3, '"Polska Konstytucja" wyd. Helion, 2019', 200);
+
+INSERT INTO "WH_Ordered_products"
+VALUES (1, 1, 1, 100);
+INSERT INTO "WH_Ordered_products"
+VALUES (2, 1, 2, 50);
+INSERT INTO "WH_Ordered_products"
+VALUES (3, 2, 3, 4);
+INSERT INTO "WH_Ordered_products"
+VALUES (4, 2, 1, 100);
+INSERT INTO "WH_Ordered_products"
+VALUES (5, 2, 2, 200);
+INSERT INTO "WH_Ordered_products"
+VALUES (6, 3, 1, 1000);
+INSERT INTO "WH_Ordered_products"
+VALUES (7, 3, 2, 500);
+INSERT INTO "WH_Ordered_products"
+VALUES (8, 3, 3, 100);
+INSERT INTO "WH_Ordered_products"
+VALUES (9, 1, 3, 20);
+COMMIT;
