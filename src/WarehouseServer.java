@@ -117,4 +117,24 @@ public class WarehouseServer{
     public List<Map<String, String>> getOrderedProducts(){
         return connector.fetch("SELECT * FROM \"WH_Products\"");
     }
+
+    public List<Map<String, String>> searchProductName(String name){
+        return connector.fetch(String.format("SELECT * FROM \"WH_Products\" WHERE \"Name\" LIKE \"%s%\"", name));
+    }
+
+    public List<Map<String, String>> searchProductID(String id){
+        return connector.fetch(String.format("SELECT * FROM \"WH_Products\" WHERE \"Product_id\" LIKE \"%s%\"", id));
+    }
+
+    public void cancelOrder(int orderID){
+        changeOrderStatus("Canceled", orderID);
+        int employeeID = Integer.parseInt(connector.fetch(String.format("SELECT \"Employee_id\" FROM \"WH_Orders\" WHERE \"Order_id\" = %d", orderID)).get(0).get("EMPLOYEE_ID"));
+        employeeApps.get(employeeID).is_working = false;
+        employeeApps.get(employeeID).current_order_id = 0;
+    }
+
+    public List<Map<String, String>> getProductsByOrder(int id) {
+        return connector.fetch(String.format("SELECT \"Product_id\", \"Count\" FROM \"WH_Ordered_products\" WHERE \"Order_id\" = %d", id));
+    }
+
 }
