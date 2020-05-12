@@ -20,9 +20,11 @@ public class App extends JFrame implements ActionListener {
     private JMenu shopModeMenu;
     private JMenu workerModeMenu;
     private JMenu managerModeMenu;
+    private JMenuItem shopOrderListMenu;
     private JMenuItem workerOrderListMenu;
     private JMenuItem managerOrderListMenu;
     private JMenuItem shopNewOrderMenu;
+    private JMenuItem workerCurrentOrderMenu;
     private JMenuItem shopToWorkerMode;
     private JMenuItem shopToManagerMode;
     private JMenuItem workerToShopMode;
@@ -102,22 +104,40 @@ public class App extends JFrame implements ActionListener {
     }
 
     private void createMenus() {
+        String changeMode = "Zmień tryb";
+        String orders = "Zamówienie";
+        String shop = "Sklep";
+        String worker = "Pracownik";
+        String manager = "Manager";
+        String orderList = "Lista zamówień";
+
         this.shopMenuBar = new JMenuBar();
         this.workerMenuBar = new JMenuBar();
         this.managerMenuBar = new JMenuBar();
 
-        this.shopModeMenu = new JMenu("Zmień tryb");
-        this.workerModeMenu = new JMenu("Zmień tryb");
-        this.managerModeMenu = new JMenu("Zmień tryb");
+        this.shopModeMenu = new JMenu(changeMode);
+        this.workerModeMenu = new JMenu(changeMode);
+        this.managerModeMenu = new JMenu(changeMode);
+        this.shopOrdersMenu = new JMenu(orders);
+        this.workerOrdersMenu = new JMenu(orders);
+        this.managerOrdersMenu = new JMenu(orders);
+        this.managerWorkersMenu = new JMenu(worker);
 
-        this.shopToWorkerMode = new JMenuItem("Pracownik");
-        this.shopToManagerMode = new JMenuItem("Manager");
 
-        this.workerToShopMode = new JMenuItem("Sklep");
-        this.workerToManagerMode = new JMenuItem("Manager");
+        this.shopToWorkerMode = new JMenuItem(worker);
+        this.shopToManagerMode = new JMenuItem(manager);
 
-        this.managerToShopMode = new JMenuItem("Sklep");
-        this.managerToWorkerMode = new JMenuItem("Pracownik");
+        this.workerToShopMode = new JMenuItem(shop);
+        this.workerToManagerMode = new JMenuItem(manager);
+
+        this.managerToShopMode = new JMenuItem(shop);
+        this.managerToWorkerMode = new JMenuItem(worker);
+
+        this.shopNewOrderMenu = new JMenuItem("Nowe zamówienie");
+        this.shopOrderListMenu = new JMenuItem(orderList);
+        this.workerOrderListMenu = new JMenuItem(orderList);
+        this.managerOrderListMenu = new JMenuItem(orderList);
+        this.workerCurrentOrderMenu = new JMenuItem("Obsługiwane zamówienie");
 
         this.shopToWorkerMode.addActionListener(this);
         this.shopToManagerMode.addActionListener(this);
@@ -125,23 +145,36 @@ public class App extends JFrame implements ActionListener {
         this.workerToManagerMode.addActionListener(this);
         this.managerToShopMode.addActionListener(this);
         this.managerToWorkerMode.addActionListener(this);
-
+        this.shopNewOrderMenu.addActionListener(this);
+        this.shopOrderListMenu.addActionListener(this);
+        this.workerOrderListMenu.addActionListener(this);
+        this.managerOrderListMenu.addActionListener(this);
+        this.workerCurrentOrderMenu.addActionListener(this);
 
         this.shopModeMenu.add(this.shopToWorkerMode);
         this.shopModeMenu.add(this.shopToManagerMode);
 
-        this.workerModeMenu.add(workerToShopMode);
-        this.workerModeMenu.add(workerToManagerMode);
+        this.workerModeMenu.add(this.workerToShopMode);
+        this.workerModeMenu.add(this.workerToManagerMode);
 
-        this.managerModeMenu.add(managerToShopMode);
-        this.managerModeMenu.add(managerToWorkerMode);
+        this.managerModeMenu.add(this.managerToShopMode);
+        this.managerModeMenu.add(this.managerToWorkerMode);
+
+        this.shopOrdersMenu.add(this.shopNewOrderMenu);
+        this.shopOrdersMenu.add(this.shopOrderListMenu);
+        this.workerOrdersMenu.add(this.workerOrderListMenu);
+        this.workerOrdersMenu.add(this.workerCurrentOrderMenu);
+        this.managerOrdersMenu.add(this.managerOrderListMenu);
+
+        this.shopMenuBar.add(this.shopOrdersMenu);
+        this.workerMenuBar.add(this.workerOrdersMenu);
+        this.managerMenuBar.add(this.managerOrdersMenu);
 
         this.shopMenuBar.add(this.shopModeMenu);
         this.workerMenuBar.add(this.workerModeMenu);
-        this.managerMenuBar.add(managerModeMenu);
-
-
+        this.managerMenuBar.add(this.managerModeMenu);
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         final Object source = e.getSource();
